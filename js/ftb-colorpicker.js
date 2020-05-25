@@ -1,5 +1,9 @@
-var cp;
+ var cp;
 var colSvgChoice;
+var target;
+var targetSVG;
+var color;
+var items;
 
 var hexacode = document.querySelector(".hexacode");
 
@@ -55,34 +59,19 @@ function setNewColor(hex) {
   document.querySelector('#bluebar').noUiSlider.set(blue);
 
   hex_value.value = hex;
-
-  hexacode.style.background = getCSSFromRGB(rgb);
   
+	color = hex;
   
-  
+	hexacode.style.background = getCSSFromRGB(rgb);
 
+	//Tried to get value via textbox input no joy!
+	//targetSVG = $("#hex_value").val()
+	
+	//Just not working correctly
+	//targetSVG.items[i].set('fill', ''+hex+'');
+	
+	target.css({'background-color': ''+hex+''});
 
-//Display colour from slider  
-	
-	$(this,"a.ftbQuickChoice").each(function() {
-
-	var getHexacode = (this.hex);
-	
-	console.clear();
-	
-	//Here I can view the getHexacode 
-	console.log(getHexacode)
-	
-	
-	//This isn't changing inline WHY?
-	$(this,"a.ftbQuickChoice").css({'background-color': ''+getHexacode+''});
-	
-	//Just crabs all colours
-	//$("a.ftbQuickChoice").css({'background-color': ''+getHexacode+''});
-	
-
-	});
-	  
 }
 
 function copyHex() {
@@ -93,30 +82,90 @@ function copyRGB() {
     // clipboard.writeText(this.getCSSFromRGB(this.rgb))
 	
   }
+  
 
+ 
+ 
 
+  
 document.addEventListener('DOMContentLoaded', function() {
+	
   
   $(document).on('click', 'a.ftbQuickChoice', function (e) {
 	e.preventDefault();
 	colPickerDisplay();
 
-	//var colSvgChoice = $(this).attr('data-id');
+	
+	// need to set data-id="#123456" for each circle
 	colSvgChoice = $(this).attr('data-id');
-	//console.clear();
-	
-	cp = Colorpicker(''+colSvgChoice+'');
-	
+		
+	// or set bg of circles using hex, then you can use
+	// colSvgChoice = $(this).css('backgroundColor');
+        target = $(this);
+		
+		//Just not working
+		//targetSVG = $(this); 
+
+		//Manual setting colour but applies to whole svg
+		
+		
+		//Get active svg
+		var activeObject = canvas.getActiveObject()
+		
+		/* ------------------------------------------------------------------------------------------------------- */
+
+		//loop through svg group 01
+		
+/* 		items = activeObject._objects;
+		
+		for(var i = 0; i < items.length; i++) {	
+		//canvas.add(items[i]);
+		console.log(items[i].fill)
+				
+		//adds colour to whole svg
+		console.log(items[i].set('fill', ''+targetSVG+''));	
+
+		canvas.renderAll();
+		} */
+		
+		/* ------------------------------------------------------------------------------------------------------- */
+		
+		targetSVG = 'Red'
+		//added fill colour manually
+		console.log(activeObject._objects[1].set('fill', ''+targetSVG+''));
+		//add to fabric.js canvas
+		canvas.renderAll();
+		
+		
+		
+		/* ------------------------------------------------------------------------------------------------------- */
+		
+		//loop through svg group 02
+		
+/* 		var color = '#ff00ff';
+
+		if (activeObject && activeObject._objects) {
+		  for (var i = 0; i < activeObject._objects.length; i++) {
+			activeObject._objects[1].set({
+			  fill: color
+			});
+		  }
+		}
+		canvas.renderAll();
+		 */
+		/* ------------------------------------------------------------------------------------------------------- */
+		
+		
+		
+				
+		cp = Colorpicker(''+colSvgChoice+'');
+		
+
 	
 });
-  
-  
-  
-  
-  
-  
-  
 }, false);
+
+
 
 document.querySelector('#redbar').noUiSlider.on('slide', function() {
   var red = document.querySelector('#redbar').noUiSlider.get();
@@ -160,3 +209,4 @@ for (var el of els) {
     }
   }
 }
+ 

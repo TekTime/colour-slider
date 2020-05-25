@@ -1,4 +1,6 @@
 	var canvas = new fabric.Canvas('c');
+	
+	var loadedObjects;
 	var HideControls = {
 		'tl': true, //rotate
 		'tr': true, //expand
@@ -67,7 +69,7 @@
 	function loadPreviewer() {
 		var group = [];
 		fabric.loadSVGFromString(svg, function (objects, options) {
-			var loadedObjects = new fabric.Group(group);
+			loadedObjects = new fabric.Group(group);
 			loadedObjects.set({
 				originX: 'center',
 				originY: 'center',
@@ -223,10 +225,15 @@
 	function addClipArt(clipart) {
 		var group = [];
 		clearFirst();
-		fabric.loadSVGFromURL('img/clipart-png/' + clipart, function (image, options) {
-			var loadedObjects = fabric.util.groupSVGElements(image, options);
+/* 		fabric.loadSVGFromURL('img/clipart-png/' + clipart, function (image, options) {
+			var loadedObjects = fabric.util.groupSVGElements(image, options); */
+			//fabric.loadSVGFromURL('img/clipart-png/' + clipart, function (objects, options) {
+			fabric.loadSVGFromURL('img/clipart-png/' + clipart, function (svgobject) {
+			var loadedObjects = new fabric.Group(svgobject, {
+			
+			//var loadedObjects = fabric.util.groupSVGElements(objects, options);			
 			//var loadedObjects = new fabric.Group(group);
-			loadedObjects.set({
+			//loadedObjects.set({
 				originX: 'center',
 				originY: 'center',
 				cornersize: 4,
@@ -245,16 +252,24 @@
 				hoverCursor: "pointer",
 				hasRotatingPoint: false
 			});
+			
+			
+			//loadedObjects.item(2).fill = 'yellow';
+			
 			canvas.centerObject(loadedObjects);
 			canvas.add(loadedObjects);
 			canvas.setActiveObject(loadedObjects);
 			loadedObjects.setControlsVisibility(HideControls);
 			canvas.renderAll();
+			//var getSvgDetails = canvas.toSVG();
+			//console.log(loadedObjects)
+			//console.log(getSvgDetails)
+			
 		}, function (item, object) {
 			object.set('id', item.getAttribute('id'));
 			group.push(object);
 			var svgResults = (object.fill);
-			
+			//console.log('Will It Work: ' +svgResults)
 
 	
 			if(object.fill === '' || object.fill === 'none'){
@@ -287,9 +302,6 @@
 	}
 	
 	
-	
-
-		
 		
 
 	function loadClipArt() {
